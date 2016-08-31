@@ -25,8 +25,6 @@ shopify-helix helps you maintain a more modular and scalable codebase while keep
     - `git clone git@github.com:no2-co/shopify-helix.git .`
 4. Install NPM dependencies
     - `npm install`
-5. Navigate to your `./gulp` directory and create a `vault.json` file
-    - `touch vault.json`
 
 ## Configuration
 
@@ -51,7 +49,7 @@ The `config.json` configuration file holds all of the different configuration op
 
 ### gulp/vault.json
 
-The `vault.json` configuration file holds your Shopify API key and API password as well as any other sensitive information you do not want to commit to your repository.
+The `vault.json` configuration file holds your Shopify API key and API password as well as any other sensitive information you dmay not want to commit to your repository.
 
 **Note:** The `shopify_api_key` and `shopify_api_password` are **required** in `vault.json`.
 
@@ -62,12 +60,19 @@ The `vault.json` configuration file holds your Shopify API key and API password 
 }
 ```
 
+To create a new API key and password:
+
+1) Create a [private app] (https://help.shopify.com/api/guides/api-credentials#generate-private-app-credentials) in Shopify and get the API Key and Password for it.
+2) Set the required permissions for theme modification
+3) Copy and Paste the new API key and password into the ./gulp/vault.json file
+4) If the repo is public or shared, add ./gulp/vault.json to .gitignore
+
 ## Gulp Tasks
 
 ### Default Task
 
 - `gulp` - Runs the default Gulp tasks. Tasks that are run are below:
-  - `boilerplate`
+  - `timber`
   - `shopify:watch`
   - `watch`
 
