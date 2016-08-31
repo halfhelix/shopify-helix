@@ -13,8 +13,8 @@
 	],
 	"sources": {
 		"scss": "./assets/scss/**/*.scss",
-		"scripts": "./assets/js/**/*.js",
-		"images": "./assets/img/**",
+		"scripts": "./assets/javascript/**/*.js",
+		"images": "./assets/images/**",
 		"fonts": "./assets/fonts/**"
 	},
 	"destination": "./theme/assets",
