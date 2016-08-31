@@ -1,4 +1,4 @@
-# shopify-helix starerkit
+# shopify-helix starterkit
 
 shopify-helix aims to cut down on the tedious aspects of developing a Shopify website.
 
