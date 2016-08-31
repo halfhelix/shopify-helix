@@ -1,6 +1,6 @@
 # shopify-helix starerkit
 
-<img src="hh-logo.png" alt="Half Helix" style="height: 300px; margin: 0 auto;"/>
+<img src="hh-logo.png" alt="Half Helix" style="width: 300px;"/>
 
 shopify-helix aims to cut down on the tedious aspects of developing a Shopify website.
 
