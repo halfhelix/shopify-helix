@@ -1,6 +1,6 @@
 # shopify-helix starerkit
 
-![Half Helix](hh-logo.png)
+![Half Helix](hh-logog.png =250x)
 
 shopify-helix aims to cut down on the tedious aspects of developing a Shopify website.
 
