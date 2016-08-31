@@ -76,9 +76,8 @@ The `vault.json` configuration file holds your Shopify API key and API password 
 - `gulp shopify:watch`
   - Watches for changes in the `./theme` directory. When it detects a change, your updated files will automatically be uploaded to your live Shopify website.
 
-
--  TODO: `gulp shopify:init`
-  - Uploads all files found in the `./theme` directory to your live Shopify website.
+- `gulp shopify:deploy`
+  - Uploads all files found in the `./theme` directory to your live Shopify website. Use with cation.
 
 ### Development Tasks
 
@@ -105,7 +104,7 @@ The `vault.json` configuration file holds your Shopify API key and API password 
 
 ### Other Tasks
 
-- `gulp boilerplate`
+- `gulp timber`
   - Moves the default theme assets to the `./theme/assets` directory
   - This task allows you to add the `./theme/assets` directory to your .gitignore file while still maintaining all of the default theme assets
 

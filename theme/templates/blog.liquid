@@ -1,92 +1,99 @@
+<!-- /templates/blog.liquid -->
+{% comment %}
+
+  Loop through a defined number of articles with the 'paginate' tag.
+  Don't forget to close the tag after your loop.
+
+{% endcomment %}
+
 {% paginate blog.articles by 5 %}
 
-{% if current_tags %}
-<h1 class="delta">{{ blog.title | link_to: blog.url }} <span class="quiet">&raquo;</span> {{ current_tags.first }}</h1>
-{% else %}
-<h1 class="delta">{{ blog.title }}</h1>
-{% endif %}
+{% include 'breadcrumb' %}
 
-<div class="articles">
+{% comment %}
+  This template is also used for listing out articles of a specific tag.
+  You can change layouts or styles by checking if current_tags is true.
+{% endcomment %}
+<div class="grid--rev">
 
-  {% for article in blog.articles %}
-  
-  {% comment %}
-    Let's extract a blog image.
-    We will look for an image in the excerpt first, and in the blog post itself second.
-    We will remove the image suffix to grab as big an image as we can.
-  {% endcomment %}
-    
-  {% assign article_has_image = false %}
-  {% assign img_tag = '<' | append: 'img' %}
-  {% if article.excerpt_or_content contains img_tag %}
-    {% assign src = article.excerpt_or_content | split: 'src="' %}
-    {% assign src = src[1] | split: '"' | first %}
-    {% if src %}
-      {% assign article_has_image = true %}
-      {% assign image_src = src | replace: '_small', '' | replace: '_compact', '' | replace: '_medium', '' | replace: '_large', '' | replace: '_grande', '' %}
+  <div class="grid__item large--three-quarters">
+
+    {% if current_tags %}
+      <h1>{{ blog.title | link_to: blog.url }} &mdash; {{ current_tags.first }}</h1>
+    {% else %}
+      <h1>{{ blog.title }}</h1>
     {% endif %}
-  {% endif %}  
-  
-  <div class="article{% if forloop.first %} first{% endif %}{% if forloop.last %} last{% endif %} clear">
-    <h2 class="title">
-      <a href="{{ article.url }}">{{ article.title }}</a>
-    </h2>
-    <h3 class="date">
-      <time pubdate datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%b %d, %Y' }}</time>
-    </h3>
-    <div class="row">
-      {% if article_has_image %}
-      <div class="third column">
-        <a href="{{ article.url }}">
-          <span class="square-holder" style="background-image: url({{ image_src }})">
-          </span>
-        </a>
-      </div>
-      <div class="two-thirds column">
-        <div class="rte fadeout-overflow-bottom grid-margins">          
-      {% else %}
-      <div class="full column">
+
+    {% comment %}
+      Loop through each article in your blog. This is limited to what you set for pagination above.
+
+      For more info on article liquid tags:
+        - http://docs.shopify.com/themes/liquid-variables/article
+    {% endcomment %}
+
+    {% for article in blog.articles %}
+
+      <div class="article">
+
+        <h2 class="h3"><a href="{{ article.url }}">{{ article.title }}</a></h2>
+        {% capture author %}<strong>{{ article.author }}</strong>{% endcapture %}
+        {% capture date %}<time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: format: 'month_day_year' }}</time>{% endcapture %}
+        <p>{{ 'blogs.article.author_on_date_html' | t: author: author, date: date }}</p>
+
+        {% if article.image %}
+          <a class="article__featured-image" href="{{ article.url }}">
+            {{ article | img_url: '1024x1024' | img_tag: article.title }}
+          </a>
+        {% endif %}
+
+        {% comment %}
+          Add a surrounding div with class 'rte' to anything that will come from the rich text editor.
+          Since this is just a listing page, you can either use the excerpt or truncate the full article.
+        {% endcomment %}
         <div class="rte">
-      {% endif %}        
           {% if article.excerpt.size > 0 %}
-          <div class="no-images">{{ article.excerpt }}</div>
+            {{ article.excerpt }}
           {% else %}
-          <p>{{ article.content | strip_html | truncatewords: 120 }}</p>
+            <p>{{ article.content | strip_html | truncatewords: 100 }}</p>
           {% endif %}
         </div>
-        <p>
-          <a class="blog-read-more" href="{{ article.url }}">Read more →</a>
-        </p>
+
+        {% comment %}
+          Show off meta information like number of comments and tags.
+        {% endcomment %}
+        <ul class="inline-list">
+          {% if blog.comments_enabled? %}
+          <li>
+            <a href="{{ article.url }}#comments">
+              {{ 'blogs.comments.with_count' | t: count: article.comments_count }}
+            </a>
+          </li>
+          {% endif %}
+
+          {% include 'tags-article' %}
+        </ul>
+
+        <p><a href="{{ article.url }}">{{ 'blogs.article.read_more' | t }} &rarr;</a></p>
+
       </div>
-    </div>
-    <div class="meta">
-      {% if blog.comments_enabled? and article.comments_count > 0 %}
-      <span class="meta-comments">
-        <a href="{{ article.url }}#comments"><i class="fa fa-comment"></i> {{ article.comments_count }} {{ article.comments_count | pluralize: 'comment','comments' }}</a>
-      </span>
-      {% endif %}
-      {% if article.tags.size > 0 %}
-      <span class="tags">
-        {% for tag in article.tags %} 
-        <a href="{{ blog.url }}/tagged/{{ tag | handle }}">{% if forloop.first %}<i class="fa fa-tag"></i> {% endif %}{{ tag }}</a>{% unless forloop.last %}, {% endunless %}
-        {% endfor %}
-      </span>
-      {% endif %}
+
+      {% unless forloop.last %}<hr>{% endunless %}
+
+    {% endfor %}
+
+    {% if paginate.pages > 1 %}
+      <hr>
+      <div class="pagination">
+        {{ paginate | default_pagination }}
+      </div>
+    {% endif %}
+
   </div>
-</div>
-  
-{% endfor %}
+
+  <div class="grid__item large--one-quarter">
+    {% include 'blog-sidebar' %}
+  </div>
 
 </div>
-  
-{% if paginate.pages > 1 %}
-<div class="pagination">
-{% comment %}
-  When paginating blog articles, a previous article is actually a newer article, not an older one,
-  because blog articles are shown and paginated in a reversed chronological order.
-  The word 'previous' can be confusing, hence we'll change it.
-{% endcomment %}
-{{ paginate | default_pagination | replace: 'Previous', 'Newer articles' | replace: 'Next', 'Older articles' }}
-{% endif %}
 
 {% endpaginate %}
