@@ -115,7 +115,7 @@ The `vault.json` configuration file holds your Shopify API key and API password 
 
 The Shopify theme lives in the `./theme` directory.
 
-This starterkit comes with Shopify's [Skeleton theme](https://github.com/Shopify/skeleton-theme). You can customize Shopify's Skeleton theme or create your own custom theme!
+This starterkit comes with Shopify's [Timber theme](https://shopify.github.io/Timber/). You can customize Shopify's Timber theme or create your own custom theme!
 
 ### Customizing your Shopify Theme
 
