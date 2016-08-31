@@ -1,72 +1,189 @@
+<!-- /templates/search.liquid -->
 {% comment %}
-The search.liquid template is not a required template.
-That search.liquid template is included in the current theme to make it easier for you 
-to customize your /search page.
-Whether you are using your own template for the search page or not,
-the {{ content_for_header }} tag in theme.liquid will always output the following on the /search page:
-<link rel="stylesheet" href="//cdn.shopify.com/s/global/search.css" type="text/css" />
-So the /search page is always styled by a globally-hosted stylesheet called search.css.
-You may override and complement that CSS in your theme's stylesheet.
-We are using a div#searchresults below so that the styles defined in search.css get
-applied to the elements on this page; the 'searchresults' id is used in the CSS
-selectors inside search.css.
+
+  To return only products or pages in results:
+    - http://docs.shopify.com/manual/configuration/store-customization/return-only-product-in-storefront-search-results
+    - Or manually add type=product or type=page to the search URL as a parameter
+
 {% endcomment %}
 
-<div id="searchresults">
-  
-  <div class="centered">
-    <form action="/search" method="get" class="search-form" role="search">
-      <input name="q" type="search" id="search-field" placeholder="Search store..." value="{{ search.terms | escape }}" />
-      <input type="submit" id="search-submit" value="Search" />
-    </form>
-  </div>
-  
-  {% comment %}
-  search.performed is false when accessing the /search page without a 'q' parameter set
-  in the URL. A shop-owner can link to the /search page from one of his link lists.
-  It is important to show a search form on that page if search.performed is false.
-  {% endcomment %}
-  
-  {% if search.performed %}
-    
-    {% paginate search.results by 10 %}
-    
-    {% comment %}
-    Common pitfall to avoid: search.results should never be accessed before the opening 
-    paginate tag. Move the opening and closing paginate tags to the very top and bottom of your
-    search.liquid template if you need to.
-    If you fail to do the above, the pagination of search results will be broken.
-    search.results_count is fine to access in or out of the paginate block.
-    {% endcomment %}
-  
-    {% if search.results_count == 0 %}  
-    <p class="centered">Your search for "{{ search.terms }}" did not yield any results.</p>              
-    {% else %}
-    <ol>
-      {% for item in search.results %}      
-      <li class="clearfix">
-        <h3>{{ item.title | link_to: item.url }}</h3>
-        {% if item.vendor %}
-        <div class="result-image">
-          <a href="{{ item.url }}" title="{{ item.title | escape }}">
-            {{ item | img_url: 'small' | img_tag: item.featured_image.alt }}
-          </a>
-        </div>
-        {% endif %}
-        <span>{{ item.content | strip_html | truncatewords: 40 | highlight: search.terms }}</span>        
-      </li>
-      {% endfor %}
-    </ol>
-    {% endif %}    
-    
-    {% if paginate.pages > 1 %}
-    <div id="pagination">
-      {{ paginate | default_pagination }}
-    </div>
-    {% endif %}
-    
-    {% endpaginate %}    
-    
-  {% endif %}  
+{% comment %}
+  Set grid_results to true and set search results as a grid instead of a list.
+  This works well when your search is only for products.
+{% endcomment %}
+{% assign grid_results = false %}
 
-</div>
+{% comment %}
+  Check to enforce respond.js
+{% endcomment %}
+{% assign respond_js_secret_key = shop.domain | md5 %}
+{% unless search.terms == respond_js_secret_key %}
+
+{% comment %}
+  Avoid accessing search.results before the opening paginate tag.
+  If you do, the pagination of results will be broken.
+{% endcomment %}
+{% paginate search.results by 10 %}
+
+  <div class="grid">
+    <div class="grid__item large--two-thirds push--large--one-sixth">
+
+      {% if search.performed %}
+        {% if search.results_count == 0 %}
+          <h1 class="text-center">{{ 'general.search.no_results_html' | t: terms: search.terms }}</h1>
+        {% else %}
+          <h1 class="text-center">{{ 'general.search.results_for_html' | t: terms: search.terms }}</h1>
+        {% endif %}
+      {% else %}
+        <h1 class="text-center">{{ 'general.search.title' | t }}</h1>
+      {% endif %}
+
+      {% include 'search-bar' %}
+
+      {% if search.performed %}
+
+        <hr class="hr--clear">
+
+        <div class="grid-uniform">
+          {% for item in search.results %}
+            {% comment %}
+              Check if the product is on sale and set a variable to be used below.
+            {% endcomment %}
+            {% assign on_sale = false %}
+            {% if item.compare_at_price > item.price %}
+              {% assign on_sale = true %}
+            {% endif %}
+
+            {% comment %}
+              Check if the product is sold out and set a variable to be used below.
+            {% endcomment %}
+            {% assign sold_out = true %}
+            {% if item.available %}
+              {% assign sold_out = false %}
+            {% endif %}
+
+            {% if grid_results == false %}
+              <!-- begin list search results-->
+              <div class="grid__item">
+                <div class="grid">
+                  {% if item.featured_image %}
+                    {% comment %}
+                      We have a featured_image, so it's likely a product
+                    {% endcomment %}
+                    <div class="grid__item one-third">
+                      <a href="{{ item.url }}" title="{{ item.title | escape }}">
+                        {{ item.featured_image.src | img_url: 'medium' | img_tag: item.featured_image.alt }}
+                      </a>
+                    </div>
+                  {% endif %}
+
+                  {% comment %}
+                    If we don't have a featured_image, add a push-- class to keep the alignment the same
+                  {% endcomment %}
+                  <div class="grid__item two-thirds {% unless item.featured_image %}push--one-third{% endunless %}">
+                    <h2 class="h3">{{ item.title | link_to: item.url }}</h2>
+
+                    {% if item.price %}
+                      <p>
+                        {% comment %}
+                          You can show a leading 'from' or 'up to' by checking 'product.price_varies'
+                          if your variants have different prices.
+                        {% endcomment %}
+                        {% if on_sale %}
+                          {% if item.price_varies %}
+                            {% assign sale_price = item.price | money %}
+                            {{ 'products.product.on_sale_from_html' | t: price: sale_price }}
+                          {% else %}
+                            <strong>{{ 'products.product.on_sale' | t }}</strong>
+                            <span itemprop="price">{{ item.price | money }}</span>
+                          {% endif %}
+                        {% else %}
+                          {% if item.price_varies %}
+                            {% assign price = item.price | money %}
+                            <span itemprop="price">{{ 'products.general.from_text_html' | t: price: price }}</span>
+                          {% else %}
+                            <span itemprop="price">{{ item.price | money }}</span>
+                          {% endif %}
+                        {% endif %}
+                        {% if sold_out %}
+                          <br><strong>{{ 'products.product.sold_out' | t }}</strong>
+                        {% endif %}
+                        {% if on_sale %}
+                          <br><span class="visually-hidden">{{ 'products.general.sale_price' | t }}</span><s>{{ item.compare_at_price | money }}</s>
+                        {% endif %}
+                      </p>
+                    {% endif %}
+
+                    {% comment %}
+                      Get a brief excerpt of raw text from the page/product
+                    {% endcomment %}
+                    <p>{{ item.content | strip_html | truncatewords: 50 }}</p>
+                  </div>
+                </div>
+                {% unless forloop.last %}<hr>{% endunless %}
+              </div>
+              <!-- //list search results-->
+            {% else %}
+              <!-- begin grid search results-->
+              <div class="grid__item search-result large--one-third medium--one-third">
+                {% if item.featured_image %}
+                  <a href="{{ item.url | within: collection }}" title="{{ item.title | escape }}">
+                    {{ item.featured_image.src | img_url: 'medium' | img_tag: item.featured_image.alt }}
+                  </a>
+                {% endif %}
+
+                <h5>{{ item.title | link_to: item.url }}</h5>
+
+                {% if item.price %}
+                  <p>
+                    {% if on_sale %}
+                      {% if item.price_varies %}
+                        {% assign sale_price = item.price | money %}
+                        {{ 'products.product.on_sale_from_html' | t: price: sale_price }}
+                      {% else %}
+                        <strong>{{ 'products.product.on_sale' | t }}</strong>
+                        <span itemprop="price">{{ item.price | money }}</span>
+                      {% endif %}
+                    {% else %}
+                      {% if item.price_varies %}
+                        {% assign price = item.price | money %}
+                        <span itemprop="price">{{ 'products.general.from_text_html' | t: price: price }}</span>
+                      {% else %}
+                        <span itemprop="price">{{ item.price | money }}</span>
+                      {% endif %}
+                    {% endif %}
+                    {% if sold_out %}
+                      <br><strong>{{ 'products.product.sold_out' | t }}</strong>
+                    {% endif %}
+                    {% if on_sale %}
+                      <br><s>{{ item.compare_at_price | money }}</s>
+                    {% endif %}
+                  </p>
+                {% else %}
+                  <p>{{ item.content | strip_html | truncatewords: 50 }}</p>
+                {% endif %}
+              </div>
+              <!-- //grid search results-->
+            {% endif %}
+
+          {% endfor %}
+        </div>
+
+        {% if paginate.pages > 1 %}
+          <hr>
+          <div class="pagination">
+            {{ paginate | default_pagination | replace: '&laquo; Previous', '&larr;' | replace: 'Next &raquo;', '&rarr;' }}
+          </div>
+        {% endif %}
+
+      {% endif %}
+
+    </div>
+  </div>
+
+{% endpaginate %}
+
+{% else %}
+  {% include 'respond' %}
+  {% layout none %}
+{% endunless %}

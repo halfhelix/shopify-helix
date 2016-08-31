@@ -1,70 +1,91 @@
+<!-- /snippets/product-grid-item.liquid -->
 {% comment %}
-It may be a good idea to provide a theme setting that lets a merchant decide how many products to show per row
-on collection pages. Or, it may be a good idea to provide a control on the store front which lets a shopper decide 
-whether items be presented in a grid or in a list.
-That information about the presentation can be passed on to the product-grid-item.liquid snippet via the 'with' argument.
-Use of the 'with' argument is explained here: http://docs.shopify.com/themes/theme-templates/snippets.
-The information can then be referred to by accessing the variable which goes by the same name as the snippet,
-in this case product-grid-item. If the 'with' argument is not used, the snippet variable is set to an empty string.
-Here, for the sake of teaching, we will use 2 presentation options:
-- 3 products per row, when passing the value 'three-per-row' to the snippet
-- 4 products per row, when passing the value 'four-per-row' to the snippet
+
+  This snippet is used to showcase each product during the loop,
+  'for product in collection.products' in collection.liquid.
+
+  A liquid variable (grid_item_width) is set just before the this
+  snippet is included to change the size of the container.
+  Once the variable is set on a page, all future instances of this
+  snippet will use that width. Overwrite the variable to adjust this.
+
+  Example
+    - assign grid_item_width = 'large--one-quarter medium--one-half'
+
 {% endcomment %}
 
-{% comment %}If no value is passed to the snippet, we will set the snippet variable to a sensible default.{% endcomment %}
-{% if product-grid-item == '' %}{% assign product-grid-item = 'three-per-row' %}{% endif %}
+{% comment %}
+  Set the default grid_item_width if no variable is set
+{% endcomment %}
+{% unless grid_item_width %}
+  {% assign grid_item_width = 'large--one-third medium--one-half' %}
+{% endunless %}
 
-{% comment %}Is this product on sale?{% endcomment %}
+{% comment %}
+  Check if the product is on sale and set a variable to be used below.
+{% endcomment %}
 {% assign on_sale = false %}
 {% if product.compare_at_price > product.price %}
   {% assign on_sale = true %}
 {% endif %}
 
-<li class="{{ product-grid-item }}{% unless product.available %} sold-out{% endunless %}{% if on_sale %} on-sale{% endif %}{% if product-grid-item == 'four-per-row' %}{% cycle 'last': '', '', '', ' last-in-row' %}{% elsif product-grid-item == 'three-per-row' %}{% cycle 'last': '', '', ' last-in-row' %}{% endif %} centered">
-
-  <div class="prod-image-wrap">  
-    <a href="{{ product.url | within: collection }}">
-      <img src="{{ product | img_url: 'grande' }}" alt="{{ product.featured_image.alt | escape }}" />
-    </a>
-  </div><!-- .prod-image-wrap -->
-  
-  <div class="prod-caption">
-      <a href="{{ product.url | within: collection }}">
-        {{ product.title }}
-      </a>
-      <span class="prod-price">
-        {% if product.price_varies %}From{% endif %}
-        {{ product.price | money }}
-        {% if on_sale %}
-        <s class="compare-at-price">{{ product.compare_at_price | money }}</s>
-        {% endif %}
-      </span>
-      {% comment %}
-        All themes by Shopify should support the Product Reviews app out of the box.
-        https://apps.shopify.com/product-reviews
-      {% endcomment %}
-      <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
-  </div><!-- .prod-caption -->
-  
-</li>
-
 {% comment %}
-You don't need to use a clearing div. Use whatever it is you use to clear
-floated elements. The code that follows just just shows you how to use a cycle element.
-Notice that we named it ( 'clear' ). We need to name it because there's another cycle
-element in this file ( we called that other one 'last' ). If you have more than one
-cycle element in a rendered view, you'll need to name all of them.
-The cycle element is documented here: http://docs.shopify.com/themes/liquid-basics/logic#cycle
+  Check if the product is sold out and set a variable to be used below.
 {% endcomment %}
-
-{% if product-grid-item == 'six-per-row' %}
-{% cycle 'clear': '', '', '', '', '', '<div style="clear:both"></div>' %}
-{% elsif product-grid-item == 'five-per-row' %}
-{% cycle 'clear': '', '', '', '', '<div style="clear:both"></div>' %}
-{% elsif product-grid-item == 'four-per-row' %}
-{% cycle 'clear': '', '', '', '<div style="clear:both"></div>' %}
-{% elsif product-grid-item == 'three-per-row' %}
-{% cycle 'clear': '', '', '<div style="clear:both"></div>' %}
-{% elsif product-grid-item == 'two-per-row' %}
-{% cycle 'clear': '', '<div style="clear:both"></div>' %}
+{% assign sold_out = true %}
+{% if product.available %}
+  {% assign sold_out = false %}
 {% endif %}
+
+<div class="grid__item {{ grid_item_width }}">
+
+  {% comment %}
+    Link to your product with the 'within: collection' filter for the link to be aware of the collection.
+    This allows you to create collection-based navigation on the product page.
+
+    Results of using 'within: collection':
+    - Instead of a URL with /products/product-handle
+      you would get /collections/collection-handle/products/product-handle
+
+    For more info on navigation within a collection
+      - http://docs.shopify.com/support/your-store/collections/how-to-navigate-within-a-collection
+
+  {% endcomment %}
+  <a href="{{ product.url | within: collection }}" class="grid__image">
+    <img src="{{ product.featured_image.src | img_url: 'large' }}" alt="{{ product.featured_image.alt | escape }}">
+  </a>
+
+  <p class="h6">
+    <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
+  </p>
+  <p>
+    {% comment %}
+      You can show a leading 'from' or 'up to' by checking 'product.price_varies'
+      if your variants have different prices.
+    {% endcomment %}
+    {% if on_sale %}
+      {% if product.price_varies %}
+        {% assign sale_price = product.price | money %}
+        {{ 'products.product.on_sale_from_html' | t: price: sale_price }}
+      {% else %}
+        <strong>{{ 'products.product.on_sale' | t }}</strong>
+        {{ product.price | money }}
+      {% endif %}
+    {% else %}
+      {% if product.price_varies %}
+        {% assign price = product.price | money %}
+        {{ 'products.general.from_text_html' | t: price: price }}
+      {% else %}
+        {{ product.price | money }}
+      {% endif %}
+    {% endif %}
+    {% if sold_out %}
+      <br><strong>{{ 'products.product.sold_out' | t }}</strong>
+    {% endif %}
+    {% if on_sale %}
+      <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
+      <br><s>{{ product.compare_at_price | money }}</s>
+    {% endif %}
+  </p>
+
+</div>

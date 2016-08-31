@@ -4,8 +4,8 @@ module.exports = function(gulp, config) {
 	'use strict';
 
 	// Moves Skeleton theme assets ./theme/assets
-	gulp.task('boilerplate', function() {
-		return gulp.src('./assets/boilerplate/**')
+	gulp.task('timber', function() {
+		return gulp.src('./assets/timber/**')
 			.pipe(gulp.dest(config.destination));
 	});
 
@@ -16,5 +16,5 @@ module.exports = function(gulp, config) {
 	  gulp.watch(config.sources.fonts, ['fonts']);
 	});
 
-	gulp.task('default', ['boilerplate', 'shopify:watch', 'watch']);
+	gulp.task('default', ['timber', 'shopify:watch', 'watch']);
 };
