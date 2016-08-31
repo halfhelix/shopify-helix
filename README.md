@@ -1,5 +1,7 @@
 # shopify-helix starerkit
 
+![Half Helix](hh-logo.png)
+
 shopify-helix aims to cut down on the tedious aspects of developing a Shopify website.
 
 Don't like having one huge assets folder? Need to compile your modular Sass and ES6 JavaScript into `.liquid` files? Want to upload your files on save?
