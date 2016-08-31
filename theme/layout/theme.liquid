@@ -68,9 +68,9 @@
      </li>
      {% for link in linklists.main-menu.links %}
 
-         <!-- Create a dropdown menu by naming a linklist the same as a link in the parent nav
-         More info on dropdowns:
-           - http://docs.shopify.com/manual/your-website/navigation/create-drop-down-menu -->
+       <!-- Create a dropdown menu by naming a linklist the same as a link in the parent nav
+       More info on dropdowns:
+       - http://docs.shopify.com/manual/your-website/navigation/create-drop-down-menu -->
        {% assign child_list_handle = link.title | handleize %}
        {% if linklists[child_list_handle].links != blank %}
          <li class="mobile-nav__item{% if link.active %} mobile-nav__item--active{% endif %}" aria-haspopup="true">
@@ -173,9 +173,9 @@
 
            <!-- Show number of items in the cart and total cost in the /cart link
            Ajax Cart Notes:
-             - #cartCount updates the total number of items in the cart
-             - #cartCost updates the total cost of the cart
-             - Documentation:  http://shopify.com/timber#ajax-cart -->
+           - #cartCount updates the total number of items in the cart
+           - #cartCost updates the total cost of the cart
+           - Documentation:  http://shopify.com/timber#ajax-cart -->
            <div>
              <a href="/cart" class="site-header__cart-toggle js-drawer-open-right" aria-controls="CartDrawer" aria-expanded="false">
                <span class="icon icon-cart" aria-hidden="true"></span>
@@ -219,7 +219,7 @@
 
          <!-- List out your main-menu linklist (default)
          More info on linklists:
-           - http://docs.shopify.com/themes/liquid-variables/linklists -->
+         - http://docs.shopify.com/themes/liquid-variables/linklists -->
 
          <!-- begin site-nav -->
          <ul class="site-nav" id="AccessibleNav">
@@ -227,7 +227,7 @@
 
              <!-- Create a dropdown menu by naming a linklist the same as a link in the parent nav
              More info on dropdowns:
-               - http://docs.shopify.com/manual/your-website/navigation/create-drop-down-menu -->
+             - http://docs.shopify.com/manual/your-website/navigation/create-drop-down-menu -->
 
              {% assign child_list_handle = link.title | handleize %}
              {% if linklists[child_list_handle].links != blank %}
@@ -322,7 +322,7 @@
                it will fallback to a customer form so you can still capture the email.
 
                MailChimp newsletter integration and requirement:
-                - http://docs.shopify.com/support/configuration/store-customization/where-do-i-get-my-mailchimp-form-action -->
+               - http://docs.shopify.com/support/configuration/store-customization/where-do-i-get-my-mailchimp-form-action -->
 
              <h3>{{ 'layout.footer.newsletter_title' | t }}</h3>
              {% if settings.newsletter_form_action != blank %}
@@ -396,7 +396,7 @@
 
  <!-- Ajaxify your cart with this plugin.
  Documentation:
-   - http://shopify.com/timber#ajax-cart -->
+ - http://shopify.com/timber#ajax-cart -->
 
  {% if settings.ajax_cart_method == "drawer" %}
    {{ 'handlebars.min.js' | asset_url | script_tag }}

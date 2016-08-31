@@ -1,28 +1,28 @@
 <!-- /templates/search.liquid -->
-{% comment %}
+<!--
 
   To return only products or pages in results:
     - http://docs.shopify.com/manual/configuration/store-customization/return-only-product-in-storefront-search-results
     - Or manually add type=product or type=page to the search URL as a parameter
 
-{% endcomment %}
+-->
 
-{% comment %}
+<!--
   Set grid_results to true and set search results as a grid instead of a list.
   This works well when your search is only for products.
-{% endcomment %}
+-->
 {% assign grid_results = false %}
 
-{% comment %}
+<!--
   Check to enforce respond.js
-{% endcomment %}
+-->
 {% assign respond_js_secret_key = shop.domain | md5 %}
 {% unless search.terms == respond_js_secret_key %}
 
-{% comment %}
+<!--
   Avoid accessing search.results before the opening paginate tag.
   If you do, the pagination of results will be broken.
-{% endcomment %}
+-->
 {% paginate search.results by 10 %}
 
   <div class="grid">
@@ -46,17 +46,17 @@
 
         <div class="grid-uniform">
           {% for item in search.results %}
-            {% comment %}
+            <!--
               Check if the product is on sale and set a variable to be used below.
-            {% endcomment %}
+            -->
             {% assign on_sale = false %}
             {% if item.compare_at_price > item.price %}
               {% assign on_sale = true %}
             {% endif %}
 
-            {% comment %}
+            <!--
               Check if the product is sold out and set a variable to be used below.
-            {% endcomment %}
+            -->
             {% assign sold_out = true %}
             {% if item.available %}
               {% assign sold_out = false %}
@@ -67,9 +67,9 @@
               <div class="grid__item">
                 <div class="grid">
                   {% if item.featured_image %}
-                    {% comment %}
+                    <!--
                       We have a featured_image, so it's likely a product
-                    {% endcomment %}
+                    -->
                     <div class="grid__item one-third">
                       <a href="{{ item.url }}" title="{{ item.title | escape }}">
                         {{ item.featured_image.src | img_url: 'medium' | img_tag: item.featured_image.alt }}
@@ -77,18 +77,18 @@
                     </div>
                   {% endif %}
 
-                  {% comment %}
+                  <!--
                     If we don't have a featured_image, add a push-- class to keep the alignment the same
-                  {% endcomment %}
+                  -->
                   <div class="grid__item two-thirds {% unless item.featured_image %}push--one-third{% endunless %}">
                     <h2 class="h3">{{ item.title | link_to: item.url }}</h2>
 
                     {% if item.price %}
                       <p>
-                        {% comment %}
+                        <!--
                           You can show a leading 'from' or 'up to' by checking 'product.price_varies'
                           if your variants have different prices.
-                        {% endcomment %}
+                        -->
                         {% if on_sale %}
                           {% if item.price_varies %}
                             {% assign sale_price = item.price | money %}
@@ -114,9 +114,9 @@
                       </p>
                     {% endif %}
 
-                    {% comment %}
+                    <!--
                       Get a brief excerpt of raw text from the page/product
-                    {% endcomment %}
+                    -->
                     <p>{{ item.content | strip_html | truncatewords: 50 }}</p>
                   </div>
                 </div>
