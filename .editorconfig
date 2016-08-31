@@ -3,12 +3,12 @@
 root = true
 
 [*]
-indent_style = tabs
-indent_size = 1
+indent_style = space
+indent_size = 2
 end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[**/*.php]
-indent_size = 2
+[*.{sh,markdown}]
+indent_size = 4
