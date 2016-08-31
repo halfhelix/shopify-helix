@@ -1,7 +1,5 @@
 # shopify-helix starerkit
 
-<img src="hh-logo.png" alt="Half Helix" style="width: 300px;"/>
-
 shopify-helix aims to cut down on the tedious aspects of developing a Shopify website.
 
 Don't like having one huge assets folder? Need to compile your modular Sass and ES6 JavaScript into `.liquid` files? Want to upload your files on save?
