@@ -1,0 +1,36 @@
+{
+	"shopify": {
+		"url": "half-helix-development-demo.myshopify.com",
+		"basePath": "./theme"
+	},
+	"minify": true,
+	"sourcemaps": true,
+	"lintjs": true,
+	"ecmascript": 6,
+	"browsers": [
+		"last 2 versions",
+		"ie >= 9"
+	],
+	"sources": {
+		"scss": "./assets/scss/**/*.scss",
+		"scripts": "./assets/js/**/*.js",
+		"images": "./assets/img/**",
+		"fonts": "./assets/fonts/**"
+	},
+	"destination": "./theme/assets",
+	"modules": {
+		"scss": [
+			"node_modules/bourbon/app/assets/stylesheets",
+			"node_modules/bourbon-neat/app/assets/stylesheets"
+		],
+		"scripts": [
+			""
+		],
+		"images": [
+			""
+		],
+		"fonts": [
+			""
+		]
+	}
+}
