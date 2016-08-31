@@ -67,7 +67,7 @@ The `vault.json` configuration file holds your Shopify API key and API password 
 ### Default Task
 
 - `gulp` - Runs the default Gulp tasks. Tasks that are run are below:
-  - `skeleton`
+  - `boilerplate`
   - `shopify:watch`
   - `watch`
 
@@ -105,7 +105,7 @@ The `vault.json` configuration file holds your Shopify API key and API password 
 
 ### Other Tasks
 
-- `gulp skeleton`
+- `gulp boilerplate`
   - Moves the default theme assets to the `./theme/assets` directory
   - This task allows you to add the `./theme/assets` directory to your .gitignore file while still maintaining all of the default theme assets
 
