@@ -1,10 +1,10 @@
-# shopify-starterkit
+# shopify-helix starerkit
 
-Shopify-starterkit aims to cut down on the tedious aspects of developing a Shopify website.
+shopify-helix aims to cut down on the tedious aspects of developing a Shopify website.
 
 Don't like having one huge assets folder? Need to compile your modular Sass and ES6 JavaScript into `.liquid` files? Want to upload your files on save?
 
-Shopify-starterkit helps you maintain a more modular and scalable codebase while keeping Shopify's CDN happy by compiling everything to the theme's asset directory.
+shopify-helix helps you maintain a more modular and scalable codebase while keeping Shopify's CDN happy by compiling everything to the theme's asset directory.
 
 ## Getting Started
 
@@ -22,7 +22,7 @@ Shopify-starterkit helps you maintain a more modular and scalable codebase while
 2. Navigate to new directory
     - `cd shopify-site`
 3. Clone this repo
-    - `git clone git@github.com:skycatchfire/shopify-starterkit.git .`
+    - `git clone git@github.com:no2-co/shopify-helix.git .`
 4. Install NPM dependencies
     - `npm install`
 5. Navigate to your `./gulp` directory and create a `vault.json` file
