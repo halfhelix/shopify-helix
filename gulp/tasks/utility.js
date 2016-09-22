@@ -14,14 +14,14 @@ module.exports = function(gulp, config) {
 		return gulp.src('./assets/timber/**')
 			.pipe(gulp.dest(config.destination));
 	});
-	gulp.task('watch', function() {
+	gulp.task('multiwatch', function() {
 	  gulp.watch(config.sources.scss, ['scss']);
 	  gulp.watch(config.sources.scripts, ['scripts']);
 	  gulp.watch(config.sources.images, ['images']);
 	  gulp.watch(config.sources.fonts, ['fonts']);
 	});
 	// in this case we DO need parallel tasks running
-	gulp.task('multiwatch', ['watch', 'shopify:watch']);
+	gulp.task('watch', ['multiwatch', 'shopify:watch']);
 	// on gulp 3 we have to use run-sequence otherwise results may vary
 	gulp.task('default', function() {
 		return runSequence(
@@ -32,7 +32,7 @@ module.exports = function(gulp, config) {
 			'scss',
 			'timber',
 			'shopify:deploy',
-			'multiwatch'
+			'watch'
 		);
 	});
 };
