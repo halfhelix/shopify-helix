@@ -3,7 +3,7 @@
 		"url": "half-helix-development-demo.myshopify.com",
 		"basePath": "./theme"
 	},
-	"minify": true,
+	"minify": false,
 	"sourcemaps": true,
 	"lintjs": true,
 	"ecmascript": 6,
