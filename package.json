@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "SKYCATCHFIRE",
+  "author": "",
   "devDependencies": {
     "babel-preset-es2015": "^6.9.0",
     "browser-sync": "^2.13.0",
