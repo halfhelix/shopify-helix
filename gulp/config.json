@@ -13,7 +13,10 @@
 	],
 	"sources": {
 		"scss": "./assets/scss/**/*.scss",
-		"scripts": "./assets/javascript/**/*.js",
+		"scripts": [
+			"./assets/javascript/vendor/*.js",
+ 			"./assets/javascript/*.js"
+		],
 		"images": "./assets/images/**",
 		"fonts": "./assets/fonts/**"
 	},
