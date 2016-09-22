@@ -21,9 +21,9 @@ module.exports = function(gulp, config) {
 			.pipe(gulpif(config.ecmascript === 6, babel({'presets': 'es2015'})))
 			.pipe(addsrc(config.modules.scripts))
 			.pipe(concat('main.js'))
-			.pipe(gulpif(config.minify === true, uglify()))
-			.pipe(gulpif(config.sourcemaps === true, sourcemaps.write()))
+			.pipe(gulpif(config.minify === true, uglify({preserveComments: 'license'})))
 			.pipe(rename('main.js.liquid'))
+			.pipe(gulpif(config.sourcemaps === true, sourcemaps.write('./')))
 			.pipe(gulp.dest(config.destination));
 	});
 };
