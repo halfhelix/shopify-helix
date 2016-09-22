@@ -9,7 +9,7 @@ module.exports = function(gulp, config) {
 			config.destination
 		]);
 	});
-	// Moves theme assets ./theme/assets
+	// Moves Skeleton theme assets ./theme/assets
 	gulp.task('timber', function() {
 		return gulp.src('./assets/timber/**')
 			.pipe(gulp.dest(config.destination));
@@ -20,8 +20,19 @@ module.exports = function(gulp, config) {
 	  gulp.watch(config.sources.images, ['images']);
 	  gulp.watch(config.sources.fonts, ['fonts']);
 	});
+	// in this case we DO need parallel tasks running
+	gulp.task('multiwatch', ['watch', 'shopify:watch']);
 	// on gulp 3 we have to use run-sequence otherwise results may vary
 	gulp.task('default', function() {
-		return runSequence('clean','timber', 'shopify:watch', 'watch');
+		return runSequence(
+			'clean',
+			'fonts',
+			'images',
+			'scripts',
+			'scss',
+			'timber',
+			'shopify:deploy',
+			'multiwatch'
+		);
 	});
 };
