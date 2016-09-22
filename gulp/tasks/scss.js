@@ -3,7 +3,7 @@ var $ = require('gulp-load-plugins')();
 module.exports = function(gulp, config) {
 
 	'use strict';
-	
+
 	gulp.task('scss', function() {
 		return gulp.src(config.sources.scss)
 			.pipe($.plumber())

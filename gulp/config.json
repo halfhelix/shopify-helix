@@ -4,7 +4,7 @@
 		"basePath": "./theme"
 	},
 	"minify": false,
-	"sourcemaps": true,
+	"sourcemaps": false,
 	"lintjs": true,
 	"ecmascript": 6,
 	"browsers": [
