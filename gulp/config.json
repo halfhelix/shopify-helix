@@ -12,7 +12,7 @@
 		"ie >= 9"
 	],
 	"sources": {
-		"scss": "./assets/scss/**/*.scss",
+		"scss": "./assets/scss/style.scss",
 		"scripts": [
 			"./assets/javascript/vendor/*.js",
  			"./assets/javascript/*.js"
