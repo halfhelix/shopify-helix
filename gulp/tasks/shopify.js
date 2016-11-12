@@ -9,12 +9,12 @@ module.exports = function(gulp, config, vault) {
 	};
 
 	gulp.task('shopify:watch', function() {
-		return watch('./theme/+(assets|layout|config|snippets|templates|locales)/**')
-	  		.pipe(gulpShopify(vault.shopify_api_key, vault.shopify_api_password, config.shopify.url, null, options));
+	return watch('./theme/+(assets|layout|config|snippets|templates|locales)/**')
+	  .pipe(gulpShopify(vault.shopify_api_key, vault.shopify_api_password, config.shopify.url, config.shopify.themeId, options));
 	});
 
 	gulp.task('shopify:deploy', function() {
   return gulp.src('./theme/+(assets|layout|config|snippets|templates|locales)/**')
-    .pipe(gulpShopify(vault.shopify_api_key, vault.shopify_api_password, config.shopify.url, null, options));
+    .pipe(gulpShopify(vault.shopify_api_key, vault.shopify_api_password, config.shopify.url, config.shopify.themeId, options));
 	});
 };

@@ -1,7 +1,8 @@
 {
 	"shopify": {
 		"url": "half-helix-development-demo.myshopify.com",
-		"basePath": "./theme"
+		"basePath": "./theme",
+		"themeID": null
 	},
 	"minify": false,
 	"sourcemaps": false,
