@@ -1,10 +1,10 @@
 # shopify-helix starterkit
 
-shopify-helix aims to cut down on the tedious aspects of developing a Shopify website.
+Shopify-Helix aims to cut down on the tedious aspects of developing a Shopify website.
 
 Don't like having one huge assets folder? Need to compile your modular Sass and ES6 JavaScript into `.liquid` files? Want to upload your files on save?
 
-shopify-helix helps you maintain a more modular and scalable codebase while keeping Shopify's CDN happy by compiling everything to the theme's asset directory.
+Shopify-Helix helps you maintain a more modular and scalable codebase while keeping Shopify's CDN happy by compiling everything to the theme's asset directory.
 
 ## Getting Started
 
@@ -30,6 +30,8 @@ shopify-helix helps you maintain a more modular and scalable codebase while keep
 
 Gulp tasks can be configured in `./gulp/config.json`.
 
+You can get your themeID by logging into Shoify, going to themes, then clicking "Customize Theme". The theme id will be in the URL.
+
 Information you do not want to commit to the repo can be stored in `./gulp/vault.json`.
 
 ### gulp/config.json
@@ -38,11 +40,14 @@ The `config.json` configuration file holds all of the different configuration op
 
 **Note:** Your Shopify URL is **required** in `config.json` and must not contain http or https.
 
+If you do not add a theme id, Shopify will automaticly upload the theme to the whichever theme is currenyl live.
+
 ```json
 {
   "shopify": {
       "url": "someshopifysite.myshopify.com",
-      "basePath": "./theme"
+      "basePath": "./theme",
+      "themeID": null
   },
 }
 ```
