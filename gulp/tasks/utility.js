@@ -1,4 +1,5 @@
 var watch = require('gulp-watch');
+var del = require('del');
 
 module.exports = function(gulp, config) {
 	'use strict';
@@ -9,7 +10,7 @@ module.exports = function(gulp, config) {
 			config.destination
 		]);
 	});
-	// Moves Skeleton theme assets ./theme/assets
+	// Moves Timber theme assets ./theme/assets
 	gulp.task('timber', function() {
 		return gulp.src('./assets/timber/**')
 			.pipe(gulp.dest(config.destination));

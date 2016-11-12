@@ -23,4 +23,5 @@ module.exports = function(gulp, config) {
 			.pipe($.if(config.sourcemaps === true, $.sourcemaps.write('./')))
 			.pipe(gulp.dest(config.destination));
 	});
+
 };
